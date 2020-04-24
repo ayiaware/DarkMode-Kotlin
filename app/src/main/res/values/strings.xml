@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NightModeKotlin</string>
+    <string name="strMode">App Light Mode</string>
+    <string name="strEnable">Enable Dark Mode</string>
+
+    <string name="strDummy">Lorem ipsum dolor sit   amet consetetur</string>
+</resources>
