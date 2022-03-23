@@ -7,7 +7,6 @@
 
     <color name="mainBackground">@color/white</color>
 
-
     <color name="textPrimary">@color/doveGray</color>
     <color name="textSecondary">@color/tealLight</color>
 
