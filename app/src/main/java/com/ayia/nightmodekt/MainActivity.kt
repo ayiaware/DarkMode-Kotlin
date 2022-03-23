@@ -1,99 +1,122 @@
 package com.ayia.nightmodekt
 
-import android.content.SharedPreferences
-import android.content.res.Configuration
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Button
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import timber.log.Timber
 
 /**
  * Created by ayia on 23/04/2020.
  */
 
-const val FIRST_START = "FirstStart"
-const val NIGHT_MODE = "NightMode"
-const val PREF = "AppSettingsPrefs"
 
 class MainActivity : AppCompatActivity() {
+
+    private var posTheme : Int? = null
+    private var arrayTheme : Array<String>? = null
+
+    private lateinit var btnSwitch: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val appSettingsPrefs: SharedPreferences = getSharedPreferences(PREF, 0)
-        val isNightModeOn: Boolean = appSettingsPrefs.getBoolean(NIGHT_MODE, true)
-        val isFirstStart: Boolean = appSettingsPrefs.getBoolean(FIRST_START,false)
-        val editor: SharedPreferences.Editor = appSettingsPrefs.edit()
+        btnSwitch = findViewById(R.id.btnSwitch)
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && isFirstStart ){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
-        else{
-            when {
-                isNightModeOn -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-                else -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
-        }
-
+        initTheme()
 
 
         btnSwitch.setOnClickListener {
-            if (isNightModeOn) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                editor.putBoolean(FIRST_START, false)
-                editor.putBoolean(NIGHT_MODE, false)
-                editor.apply()
-                //recreate activity to make changes visible
-                recreate()
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                editor.putBoolean(FIRST_START, false)
-                editor.putBoolean(NIGHT_MODE, true)
-                editor.apply()
-                recreate()
 
-            }
+            showThemeDialog()
+
         }
+
+
+    }
+
+
+    private fun initTheme(){
+
+        Timber.tag(TAG).d("initTheme")
+
+
+        arrayTheme = resources.getStringArray(R.array.themes)
+
+        posTheme =  when (MyApp.instance.appTheme) {
+            PREF_MODE_LIGHT -> 0
+            PREF_MODE_DARK -> 1
+            else -> 2
+        }
+
+        btnSwitch.text = arrayTheme!![posTheme!!]
+
+
+    }
+
+    private fun setTheme(){
+
+        Timber.tag(TAG).d("setTheme")
+
+        btnSwitch.text = arrayTheme!![posTheme!!]
+
+        Timber.tag(TAG).d("Theme $arrayTheme!![posTheme!!]")
+
+        MyApp.instance.setMyAppTheme(posTheme)
+
+
+    }
+
+
+    private fun showThemeDialog(){
+
+        Timber.tag(TAG).d("showThemeDialog")
+
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.label_select_theme)
+            .setSingleChoiceItems(R.array.themes, posTheme!!) { _, i ->
+
+                posTheme = i
+
+                Timber.tag(TAG).d("Theme selected Pos : $posTheme")
+
+                setTheme()
+
+            }.show()
+
     }
 
 
     override fun onStart() {
         super.onStart()
-        Log.i(TAG, "onStart")
+        Timber.tag(TAG).i("onStart")
     }
 
-    override fun onResume(){
+    override fun onResume() {
         super.onResume()
-        btnSwitch.text = getString(R.string.strEnable)
-        Log.i(TAG, "onResume")
+        Timber.tag(TAG).i("onResume")
     }
 
     override fun onPause() {
-        Log.i(TAG, "onPause")
+        Timber.tag(TAG).i("onPause")
         super.onPause()
     }
 
     override fun onStop() {
-        Log.i(TAG, "onStop")
+        Timber.tag(TAG).i("onStop")
         super.onStop()
     }
 
     override fun onDestroy() {
-        Log.i(TAG, "onDestroy")
+        Timber.tag(TAG).i("onDestroy")
         super.onDestroy()
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        private val TAG: String =
+            GLOBAL_TAG + " " + MainActivity::class.java.simpleName
     }
 }

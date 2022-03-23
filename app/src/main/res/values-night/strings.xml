@@ -1,5 +1,4 @@
 <resources>
+    <string name="mode_enabled">Dark mode enabled</string>
 
-    <string name="strEnable">Enable Light Mode</string>
-    <string name="strMode">App Dark Mode</string>
 </resources>

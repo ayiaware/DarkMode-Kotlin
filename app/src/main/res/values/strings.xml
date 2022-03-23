@@ -1,7 +1,22 @@
 <resources>
     <string name="app_name">NightModeKotlin</string>
-    <string name="strMode">App Light Mode</string>
-    <string name="strEnable">Enable Dark Mode</string>
 
-    <string name="strDummy">Lorem ipsum dolor sit   amet consetetur</string>
+    <string name="mode_enabled">Light mode enabled</string>
+
+    <string name="strDummy">Switching between theme modes in a real world Application</string>
+
+
+    <string name="label_select_theme">Select theme</string>
+    <string name="label_dark_mode">Dark mode</string>
+    <string name="label_light_mode">Light mode</string>
+    <string name="label_follow_system">Follow system</string>
+
+
+    <string-array name="themes">
+        <item >@string/label_light_mode</item>
+        <item >@string/label_dark_mode</item>
+        <item >@string/label_follow_system</item>
+    </string-array>
+
+
 </resources>
