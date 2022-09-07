@@ -10,6 +10,6 @@ Enable switching between Dark Mode and Light Mode in Android app. The project sh
 ### Functionalities
 - Switch modes (Follow sytem, light mode and dark mode)
 
-#### Find this repository useful? leave a⭐ for this repository [follow me] (https://github.com/ayiaware) on GitHub 🤩
+#### Find this repository useful? leave a⭐ for this repository [follow me](https://github.com/ayiaware) on GitHub 🤩
 
 
