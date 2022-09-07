@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NightModeKotlin</string>
+    <string name="app_name">DarkMode</string>
 
     <string name="mode_enabled">Light mode enabled</string>
 
