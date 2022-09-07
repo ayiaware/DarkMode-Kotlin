@@ -13,8 +13,10 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private var posTheme : Int? = null
+    private var themePosition : Int? = null
     private var arrayTheme : Array<String>? = null
+
+    private var userPrefs : UserPreferencesRepository = MyApp.instance.userPreferences
 
     private lateinit var btnSwitch: Button
 
@@ -42,17 +44,15 @@ class MainActivity : AppCompatActivity() {
 
         Timber.tag(TAG).d("initTheme")
 
-
         arrayTheme = resources.getStringArray(R.array.themes)
 
-        posTheme =  when (MyApp.instance.appTheme) {
-            PREF_MODE_LIGHT -> 0
-            PREF_MODE_DARK -> 1
+        themePosition = when (userPrefs.appTheme) {
+            Theme.LIGHT_MODE -> 0
+            Theme.DARK_MODE -> 1
             else -> 2
         }
 
-        btnSwitch.text = arrayTheme!![posTheme!!]
-
+        btnSwitch.text = arrayTheme!![themePosition!!]
 
     }
 
@@ -60,12 +60,17 @@ class MainActivity : AppCompatActivity() {
 
         Timber.tag(TAG).d("setTheme")
 
-        btnSwitch.text = arrayTheme!![posTheme!!]
+        btnSwitch.text = arrayTheme!![themePosition!!]
 
         Timber.tag(TAG).d("Theme $arrayTheme!![posTheme!!]")
 
-        MyApp.instance.setMyAppTheme(posTheme)
-
+        userPrefs.updateTheme(
+            when (themePosition) {
+                0 -> Theme.LIGHT_MODE
+                1 -> Theme.DARK_MODE
+                else -> Theme.FOLLOW_SYSTEM
+            }
+        )
 
     }
 
@@ -74,45 +79,18 @@ class MainActivity : AppCompatActivity() {
 
         Timber.tag(TAG).d("showThemeDialog")
 
-
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.label_select_theme)
-            .setSingleChoiceItems(R.array.themes, posTheme!!) { _, i ->
+            .setSingleChoiceItems(R.array.themes, themePosition!!) { _, i ->
 
-                posTheme = i
+                themePosition = i
 
-                Timber.tag(TAG).d("Theme selected Pos : $posTheme")
+                Timber.tag(TAG).d("Theme selected Pos : $themePosition")
 
                 setTheme()
 
             }.show()
 
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        Timber.tag(TAG).i("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.tag(TAG).i("onResume")
-    }
-
-    override fun onPause() {
-        Timber.tag(TAG).i("onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Timber.tag(TAG).i("onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Timber.tag(TAG).i("onDestroy")
-        super.onDestroy()
     }
 
     companion object {
